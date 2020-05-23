@@ -59,3 +59,4 @@
 
 ## UVM环境配置
 * 基于Modelsim搭建UVM环境，参考：[UVM环境配置](UVM环境配置.md)
+* `UMV Class`例子，参考：[UVM Class](./code/uvm-class/hello.sv)
