@@ -15,11 +15,11 @@ UVM各种版本的库会和`Modelsim`一起被安装完成，以下以`uvm-1.1`�
     - `vlib work`<br>
     建立work library
     - `vlog -L mtiAvm -L mtiOvm -L mtiUvm -L mtiUPF +incdir+C:/modeltech64_10.1c/verilog_src/uvm-1.1/src hello.sv`
-    编译hello_world.sv代码，通过-L 指定编译需要的几个library，通过"+incdir+"指定编译需要的UVM源文件
+    编译hello.sv代码(**请修改成正确的验证代码文件**)，通过-L 指定编译需要的几个library，通过"+incdir+"指定编译需要的UVM源文件
     - `vsim -c -sv_lib $UVM_DPI_HOME/uvm_dpi work.hello_world_example`<br>
-    执行仿真，通过-sv_lib选项，执行UVM1.1的uvm_dpi.dll，然后针对于哪一个module进行仿真
+    执行仿真，通过-sv_lib选项，执行UVM1.1的uvm_dpi.dll，然后针对"work.hello_world_example"进行仿真(**请修改成正确的module名称**)
     - `run 100`<br>
-    运行100个时间单位
+    运行100个时间单位，可更改为任意时间
 * 利用[Makefile](./code/uvm-hello/Makefile)完成自动化执行
     - 执行`make`<br>
     在"Transcript"窗口输出：`UVM_INFO hello.sv(6) @ 0: reporter [hello_world_example] Hello World!`
