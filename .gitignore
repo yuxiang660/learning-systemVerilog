@@ -1,5 +1,8 @@
 # uvm build folder
 **/work/*
 
-# uvm build sscript
+# uvm build script
 transcript
+
+# waveform file
+*.wlf

@@ -46,6 +46,23 @@
 * 芯片系统级(chip level)
 * 硅后系统级(post-silicon system level)
 
+## 验证的方法
+### 验证方法分类
+* 动态仿真(dynamic simulation)
+* 静态检查(formal check)
+* 虚拟模型(virtual prototype)
+* 硬件加速(hardware acceleration)
+* 电源功耗(power consumption)
+* 性能评估(performance evaluation)
+
+### 动态仿真
+通过测试序列和激励生成器给带验设计适当的激励，随着仿真的推进，判断输出是否符号预期。
+按照激励生成方式和检查方式，可将动态仿真分为：
+* 定向测试(directed test)
+* 随机测试(random test)
+* 参考模型检查(reference model check)
+* 断言检查(assertion check)
+
 
 # UVM实战
 
