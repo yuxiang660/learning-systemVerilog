@@ -1,4 +1,4 @@
-TARGET=testbench.sv
+TARGET=hello.sv
 SCRIPT=compile.do
 
 all : $(TARGET) $(SCRIPT)
