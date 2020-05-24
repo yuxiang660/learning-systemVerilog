@@ -21,5 +21,19 @@
 ## 创建testbench的目的是什么？
 通过仿真手段验证待测设计的功能。
 * testbench的组成
-    - 
+    - Generator<br>
+    生成各种激励以驱动被测电路
+    - Interface<br>
+    接口包括了需要被驱动或者被观测的信号
+    - Driver<br>
+    驱动激励到被测电路
+    - Monitor<br>
+    检测输入输出信号
+    - Scoreboard<br>
+    比较输出信号和期望值
+    - Environment<br>
+    包括以上所有的测试组件
+    - Test<br>
+    包括所有的测试环境
+![testbench](./code/testbenchComponent.png)
 
