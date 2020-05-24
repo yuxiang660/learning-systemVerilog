@@ -1,4 +1,4 @@
-module tb_top ();
+module tb_top # (parameter CLK_PERIOD = 10) ();
     reg clk;
     reg resetn;
     reg d;
@@ -10,7 +10,7 @@ module tb_top ();
         .d(d),
         .q(q));
 
-    always #10 clk <= ~clk;
+    always #CLK_PERIOD clk <= ~clk;
 
     initial begin
         clk <= 0;
