@@ -37,3 +37,36 @@
     包括所有的测试环境
 ![testbench](./code/testbenchComponent.png)
 
+## 什么是DUT？
+* DUT全称"Design Under Test"，是被测的硬件电路。在仿真测试中，DUT也称为DUV，即"Design Under Verification"。
+* [例子 dut.v](./code/testbench/dut.v)
+
+## 什么是interface？
+* 当DUT的端口非常复杂时，可通过定义interface抽象出测试关心的输入输出端口。
+* [例子 interface.sv](./code/testbench/interface.sv)
+
+## 什么是driver？
+* driver定义了一个task用于驱动输入信号到被测电路，可被其他模块调用。
+* [例子 driver.sv](./code/testbench/driver.sv)
+
+## driver如何实现驱动？
+* generator生成有效的数据([data transaction](./code/testbench/data.sv))给driver，driver再将数据传输到被测电路。
+* 例子"testbench"中并没有generator，generator的行为被放入了test组件。
+
+## 为什么需要monitor？
+* driver会将数据输入给DUT执行，monitor会获取DUT的输出信号，并将其传给scoreboard和期望数据做比较。
+* [例子 monitor.sv](./code/testbench/scoreboard.sv)
+
+## scoreboard的目的是什么？
+* scoreboard内部有一个和DUT行为一样的`reference model`。driver输入给DUT的信号同时会输入给scoreboard，此输入经过scoreboard中的`reference model`会产生DUT的期望输出。`reference model`的输出应该和monitor传过来的数据一致，否则测试失败。
+* [例子 scoreboard.sv](./code/testbench/scoreboard.sv)
+
+## 为什么需要environment？
+* environment组件是为了增加testbench的可扩展性，可在其中加入更过其他的组件。
+* [例子 environment.sv](./code/testbench/environment.sv)
+
+## test组件是做什么的？
+* test会实例化一个environment组件，并实施配置。
+
+## testbench流程是如何的？
+* Generator -> Driver -> Interface -> Design -> Interface -> Monitor -> Scoreboard
