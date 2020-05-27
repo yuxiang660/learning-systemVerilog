@@ -74,7 +74,18 @@
 # SystemVerilog Data Types
 ![data-type](./code/data-types.png)
 
-## event
-* trigger event: `->` or `->>`
-* wait for an event: `@` or `.triggered`
+# SystemVerilog Interprocess Communication
+Methods    | Description
+-----------| -----------
+Events     | Different threads synchronize with each other via event handles in a testbench
+Semaphores | Different threads might need to access the same resource; they take turns by using a semaphore
+Mailbox    | Threads/Components need to exchange data with each other; data is put in a mailbox and sent
+
+## Events
+* trigger event: `->eventA` or `->>eventA`
+* wait for an event: `@eventA` or `wait(eventA.triggered)`
 * [例子：event](./code/event/tb.sv)
+
+## Semaphores
+* 用于资源互斥保护，类似C++中的`mutex`
+* [例子：semaphore](./code/semaphore/tb.sv)
