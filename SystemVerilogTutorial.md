@@ -70,3 +70,11 @@
 
 ## testbench流程是如何的？
 * Generator -> Driver -> Interface -> Design -> Interface -> Monitor -> Scoreboard
+
+# SystemVerilog Data Types
+![data-type](./code/data-types.png)
+
+## event
+* trigger event: `->` or `->>`
+* wait for an event: `@` or `.triggered`
+* [例子：event](./code/event/tb.sv)
