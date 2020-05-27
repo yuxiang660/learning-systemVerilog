@@ -89,3 +89,9 @@ Mailbox    | Threads/Components need to exchange data with each other; data is p
 ## Semaphores
 * 用于资源互斥保护，类似C++中的`mutex`
 * [例子：semaphore](./code/semaphore/tb.sv)
+    * 注：例子中的`task`不加`begin..end`和加上，结果是一样的
+
+## Mailbox
+* 用于多线程间数据交换，`mailbox`的`put`和`get`是线程安全的
+* [例子：mailbox](./code/mailbox/tb.sv)
+    * 注：从例子的结果中可看出，同一时刻，mailbox的`get`总是先发生与`put`
