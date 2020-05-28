@@ -95,3 +95,156 @@ Mailbox    | Threads/Components need to exchange data with each other; data is p
 * 用于多线程间数据交换，`mailbox`的`put`和`get`是线程安全的
 * [例子：mailbox](./code/mailbox/tb.sv)
     * 注：从例子的结果中可看出，同一时刻，mailbox的`get`总是先发生与`put`
+
+# SystemVerilog接口
+## SystemVerilog接口和Verilog接口有什么不同？
+* Verilog接口
+![verilogInterface](./code/verilogInterface.png)
+```systemVerilog
+// Module
+module counter_ud 
+  #(parameter WIDTH = 4)
+  ( 
+  input           clk,
+  input           rstn,
+  input wire [WIDTH-1:0]  load,
+  input           load_en,
+  input           down,
+  output           rollover,
+  output reg [WIDTH-1:0]  count 
+);
+  ...
+endmodule
+// Interface
+interface cnt_if #(parameter WIDTH = 4) (input bit clk);
+  logic       rstn;
+  logic       load_en;
+  logic [WIDTH-1:0] load;
+  logic [WIDTH-1:0] count;
+  logic       down;
+  logic       rollover;
+endinterface
+// TB
+module tb;
+  ...
+  cnt_if     cnt_if0 (clk);
+  // Connection
+  counter_ud  c0 (   .clk     (cnt_if0.clk),
+                    .rstn     (cnt_if0.rstn),
+                    .load     (cnt_if0.load),
+                    .load_en   (cnt_if0.load_en),
+                    .down     (cnt_if0.down),
+                    .rollover   (cnt_if0.rollover),
+                    .count     (cnt_if0.count));
+endmodule
+```
+
+* SystemVerilog接口
+![systemVerilogInterface](./code/systemVerilogInterface.png)
+```systemVerilog
+// Module defined with interface
+module counter_ud  #(parameter WIDTH = 4) (cnt_if _if);
+  ...
+endmodule
+// TB
+module tb;
+  reg clk;
+  always #10 clk = ~clk;
+  cnt_if     cnt_if0 (clk);
+  // Note that here we just have to pass the interface handle
+  // to the design instead of connecting each individual signal
+  counter_ud  c0 (cnt_if0);
+  // Can use implicit port connection when all port signals have same name
+  counter_ud  c1(.*);
+  ...
+endmodule
+```
+
+# SystemVerilog Assertions
+## Assertion检测的目的
+* 检测设计的某一属性是否有期望的输出值(expect value)
+* 检测设计的某一属性是否出现了禁止出现的行为(exception)
+
+## 为什么要引入Assertions语法？
+通过以下两种写法，可以发现Assertions语法简化了代码：
+* 不用assert语句
+```verilog
+// A property written in Verilog/SystemVerilog
+always @ (posedge clk) begin
+  if (!(a && b))
+    $display ("Assertion failed");
+end
+```
+* 用assert语句
+```verilog
+// The property above written in SystemVerilog Assertions syntax
+assert property(@(posedge clk) a && b);
+```
+* assert syntax
+```verilog
+// Simple assert statement  
+assert(<expression>);
+ 
+// Assert statement with statements to be executed for pass/fail conditions
+assert(<expression>) begin
+  // If condition is true, execute these statements
+end else begin
+  // If condition is false, execute these statements
+end
+ 
+// Optionally give name for the assertion
+[assert_name] : assert(<expression>);
+```
+
+## 断言块
+* Sequence断言块
+```verilog
+// Sequence syntax
+sequence <name_of_sequence>
+  <test expression>
+endsequence
+ 
+// Assert the sequence
+assert property (<name_of_sequence>);
+```
+* Property断言块
+```verilog
+// Property syntax
+property <name_of_property>
+  <test expression> or
+  <sequence expressions>
+endproperty
+ 
+// Assert the property
+assert property (<name_of_property>);
+```
+
+## 断言种类
+两种断言：`Immediate Assertion`和`Concurrent Assertions`
+### Immediate Assertion
+* Syntax
+```verilog
+always @ (<some_event>) begin
+    ...
+    // This is an immediate assertion executed only
+    // at this point in the execution flow
+    assert(!fifo_empty);      // Assert that fifo is not empty at this point
+    ...
+end
+```
+* [例子: Immediate Assertion](./code/iassert/iassert.sv)
+### Concurrent Assertions
+* Syntax
+```systemVerilog
+// Define a property to specify that an ack signal should be 
+// returned for every grant signal within 1:4 clocks
+property p_ack;
+  @(posedge clk) gnt ##[1:4] ack;
+endproperty
+ 
+assert property(p_ack);    // Assert the given property is true always
+```
+* [例子：Concurrent Assertion](./code/cassert/tb.sv)
+    * 注：在同一仿真时间，assert动作发生在`non-Blocking`语句之前，这和`$display`的行为是一致的
+![region](./code/cassert/preponed-region.png)
+![cassert](./code/cassert/concurrent-assertion.png)
