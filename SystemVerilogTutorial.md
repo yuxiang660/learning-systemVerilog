@@ -248,3 +248,20 @@ assert property(p_ack);    // Assert the given property is true always
     * 注：在同一仿真时间，assert动作发生在`non-Blocking`语句之前，这和`$display`的行为是一致的
 ![region](./code/cassert/preponed-region.png)
 ![cassert](./code/cassert/concurrent-assertion.png)
+
+## 时间延时断言
+* `##Operator`
+* [例子：assert delay](./code/dassert/tb.sv)
+
+Time (ns)|a |b |Sequence Start|Result
+--       |--|--|--            |--
+10	|0	|0	|No	 |  FAIL (Start@10, Fail@10)
+30	|0	|1	|No	 |  FAIL (Start@30, Fail@30)
+50	|1	|1	|Yes |	
+70	|1	|1	|Yes |	
+90	|1	|0	|Yes |	FAIL (Start@50, Fail@90)
+110	|1	|1	|Yes |	PASS (Start@70, Pass@110)
+130	|0	|1	|No	 |  PASS (Start@90, Pass@130)
+150	|1	|0	|Yes |	FAIL (Start@110, Fail@150)
+170	|1	|0	|Yes |	
+190	|1	|0	|Yes |	FAIL (Start@150, Fail@190)
